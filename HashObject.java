@@ -1,22 +1,16 @@
 public class HashObject<T> {
-    private int key;
-    private T value;
+    private T key;
     private int duplicateCount;
     private int probeCount;
 
-    public HashObject(int key, T value) {
+    public HashObject(T key) {
         this.key = key;
-        this.value = value;
         duplicateCount = 0;
         probeCount = 0;
     }
 
-    public int getKey() {
+    public T getKey() {
         return key;
-    }
-
-    public T getValue() {
-        return value;
     }
 
     public void increaseDuplicateCount() {
