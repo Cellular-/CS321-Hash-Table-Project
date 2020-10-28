@@ -21,11 +21,11 @@ public class HashTest {
             doubleHashTable.insert(new HashObject<Integer>(randInt, randInt));
         }
         
-        HashTable<Integer> l = new HashTable<Integer>(ProbeType.LINEAR, loadFactor);
-        HashTable<Integer> d = new HashTable<Integer>(ProbeType.DOUBLEHASH, loadFactor);
+        HashTable<Long> l = new HashTable<Long>(ProbeType.LINEAR, loadFactor);
+        HashTable<Long> d = new HashTable<Long>(ProbeType.DOUBLEHASH, loadFactor);
         for(int i = 0; i < (int) (doubleHashTable.getTableSize() * loadFactor); i++) {
-            linearHashTable.insert(new HashObject<Long>(System.currentTimeMillis(), System.currentTimeMillis()));
-            doubleHashTable.insert(new HashObject<Long>(System.currentTimeMillis(), System.currentTimeMillis()));
+            l.insert(new HashObject<Long>(System.currentTimeMillis(), System.currentTimeMillis()));
+            d.insert(new HashObject<Long>(System.currentTimeMillis(), System.currentTimeMillis()));
         }
         
 
