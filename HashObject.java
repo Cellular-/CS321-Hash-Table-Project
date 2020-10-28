@@ -1,5 +1,6 @@
 public class HashObject<T> {
     private T key;
+    private T value;
     private int duplicateCount;
     private int probeCount;
 
@@ -9,8 +10,17 @@ public class HashObject<T> {
         probeCount = 0;
     }
 
+    public HashObject(T key, T value) {
+        this(key);
+        this.value = value;
+    }
+
     public T getKey() {
         return key;
+    }
+
+    public T getValue() {
+        return value;
     }
 
     public void increaseDuplicateCount() {
@@ -28,8 +38,8 @@ public class HashObject<T> {
         }
 
         HashObject<T> otherObj = (HashObject<T>) obj;
-
-        return value.equals(otherObj.getValue());
+        
+        return key.equals(otherObj.getKey());
     }
 
     @Override

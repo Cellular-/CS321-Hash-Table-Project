@@ -21,7 +21,7 @@ public class HashTable<T> {
     }
 
     private int hash2(int key) {
-        return 1 + (key % tableSize - 2);
+        return 1 + (key % (tableSize - 2));
     }
 
     public void insert(HashObject<T> hashObject) {
@@ -31,25 +31,27 @@ public class HashTable<T> {
         }
         
         if(probeType == ProbeType.LINEAR) {
-            for(int i = 1; hashTable[hashValue] != null; i++) {
-                if(hashTable[hashValue].equals(hashObject)) {
+            int linearProbeValue = hashValue;
+            for(int i = 1; hashTable[linearProbeValue] != null; i++) {
+                if(hashTable[linearProbeValue].equals(hashObject)) {
                     totalDuplicates++;
                 }
-                hashValue = hash1(hashValue + i);
+                linearProbeValue = hash1(hashValue + i);
                 totalProbes++;
             }
 
-            hashTable[hashValue] = hashObject;
+            hashTable[linearProbeValue] = hashObject;
         } else if(probeType == ProbeType.DOUBLEHASH) {
-            for(int i = 1; hashTable[hashValue] != null; i++) {
-                if(hashTable[hashValue].equals(hashObject)) {
+            int doubleHashValue = hashValue;
+            for(int i = 1; hashTable[doubleHashValue] != null; i++) {
+                if(hashTable[doubleHashValue].equals(hashObject)) {
                     totalDuplicates++;
                 }
-                hashValue = hashValue + i * hash2(hashValue);
+                doubleHashValue = (hashValue + (i * hash2(hashValue))) % tableSize;
                 totalProbes++;
             }
 
-            hashTable[hashValue] = hashObject;
+            hashTable[doubleHashValue] = hashObject;
         }
     }
 

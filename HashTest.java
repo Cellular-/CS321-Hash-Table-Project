@@ -11,16 +11,29 @@ public class HashTest {
         double loadFactor = Double.parseDouble(args[1]);
         int debugMode = args.length == 3 ? Integer.parseInt(args[2]) : null;
 
-        HashTable<Integer> arr = new HashTable<Integer>(ProbeType.LINEAR, .5);
+        HashTable<Integer> linearHashTable = new HashTable<Integer>(ProbeType.LINEAR, loadFactor);
+        HashTable<Integer> doubleHashTable = new HashTable<Integer>(ProbeType.DOUBLEHASH, loadFactor);
 
         Random rng = new Random();
-        for(int i = 0; i < (int) (arr.getTableSize() * loadFactor); i++) {
+        for(int i = 0; i < (int) (doubleHashTable.getTableSize() * loadFactor); i++) {
             int randInt = rng.nextInt();
-            arr.insert(new HashObject<Integer>(randInt, randInt));
+            linearHashTable.insert(new HashObject<Integer>(randInt, randInt));
+            doubleHashTable.insert(new HashObject<Integer>(randInt, randInt));
         }
+        
+        HashTable<Integer> l = new HashTable<Integer>(ProbeType.LINEAR, loadFactor);
+        HashTable<Integer> d = new HashTable<Integer>(ProbeType.DOUBLEHASH, loadFactor);
+        for(int i = 0; i < (int) (doubleHashTable.getTableSize() * loadFactor); i++) {
+            linearHashTable.insert(new HashObject<Long>(System.currentTimeMillis(), System.currentTimeMillis()));
+            doubleHashTable.insert(new HashObject<Long>(System.currentTimeMillis(), System.currentTimeMillis()));
+        }
+        
 
-        System.out.println(arr.getTotalDuplicates());
-        System.out.println(arr.getTotalProbes());
+        System.out.println(linearHashTable.getTotalDuplicates());
+        System.out.println(linearHashTable.getTotalProbes());
+
+        System.out.println(doubleHashTable.getTotalDuplicates());
+        System.out.println(doubleHashTable.getTotalProbes());
     }
 
     public static String usage() {
