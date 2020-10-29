@@ -10,11 +10,6 @@ public class HashObject<T> {
         probeCount = 0;
     }
 
-    public HashObject(T key, T value) {
-        this(key);
-        this.value = value;
-    }
-
     public T getKey() {
         return key;
     }
@@ -31,19 +26,24 @@ public class HashObject<T> {
         probeCount++;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if(!(obj instanceof HashObject<?>)) {
-            return false;
-        }
-
-        HashObject<T> otherObj = (HashObject<T>) obj;
-        
-        return key.equals(otherObj.getKey());
+    public void setProbeCount(int i) {
+        probeCount = i;
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if(this.getClass().equals(obj.getClass())) {
+            return (this.getKey().equals(((HashObject<T>)obj).getKey()));
+        }
+
+        return false;
+    }
+
+
+
+
+    @Override
     public String toString() {
-        return "mystring";
+        return key.toString() + " " + duplicateCount + " " + probeCount;
     }
 }

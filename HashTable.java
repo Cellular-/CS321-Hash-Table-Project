@@ -5,53 +5,169 @@ public class HashTable<T> {
     private double loadFactor;
     private int totalDuplicates;
     private int totalProbes;
+    private int totalInputs;
+    private int totalInserts;
 
     public HashTable(ProbeType probeType, double loadFactor) {
         tableSize = 95791;
         hashTable = new HashObject[tableSize];
-
         this.probeType = probeType;
         this.loadFactor = loadFactor;
         this.totalDuplicates = 0;
         this.totalProbes = 0;
+        this.totalInputs = 0;
+        this.totalInserts = 0;
     }
 
-    private int hash1(int key) {
-        return key % tableSize;
+    private int hash1(T k) {
+        int h = k.hashCode() % tableSize;
+        if(h < 0) {
+            h += tableSize;
+        }
+
+        return h;
     }
 
-    private int hash2(int key) {
-        return 1 + (key % (tableSize - 2));
+    private int hash2(T k) {
+        int h = 1 + (k.hashCode() % (tableSize - 2));
+
+        if(h < 0) {
+            h += tableSize;
+        }
+
+        return h;
     }
 
     public void insert(HashObject<T> hashObject) {
-        int hashValue = hash1(hashObject.getKey().hashCode());
-        if(hashValue < 0) {
-            hashValue += tableSize;
-        }
-        
+        // totalInputs++;
+        // totalProbes++;
         if(probeType == ProbeType.LINEAR) {
-            int linearProbeValue = hashValue;
-            for(int i = 1; hashTable[linearProbeValue] != null; i++) {
-                if(hashTable[linearProbeValue].equals(hashObject)) {
-                    totalDuplicates++;
+            int i = 0;
+            int hashValue = hash1(hashObject.getKey());
+            // int index = (hashValue + i) % tableSize;
+
+            // if(index < 0) {
+            //     index += tableSize;
+            // }
+            
+            // for(int j = 0; hashTable[index] != null; j++) {
+            //     if(hashTable[index].equals(hashObject)) {
+            //         totalDuplicates++;
+            //         hashObject.increaseDuplicateCount();
+            //         return;
+            //     } else {
+            //         totalProbes++;
+            //         hashObject.increaseProbeCount();
+            //     }
+
+            //     i++;
+            //     index = (hashValue + i) % tableSize;
+
+            //     if(index < 0) {
+            //         index += tableSize;
+            //     }
+            // }
+
+            while(i != tableSize) {
+                int index = (hashValue + i) % tableSize;
+
+                if(index < 0) {
+                    index += tableSize;
                 }
-                linearProbeValue = hash1(hashValue + i);
-                totalProbes++;
+
+                if(hashTable[index] == null) {
+                    hashTable[index] = hashObject;
+                    totalInserts++;
+                    totalProbes += i + 1;
+                    hashObject.setProbeCount(i + 1);
+                    return;
+                } else if(hashTable[index].equals(hashObject)) {
+                    totalDuplicates++;
+                    hashObject.increaseDuplicateCount();
+                    return;
+                }
+
+                i++;
             }
 
-            hashTable[linearProbeValue] = hashObject;
+            // hashTable[index] = hashObject;
+            // totalInserts++;
         } else if(probeType == ProbeType.DOUBLEHASH) {
-            int doubleHashValue = hashValue;
-            for(int i = 1; hashTable[doubleHashValue] != null; i++) {
-                if(hashTable[doubleHashValue].equals(hashObject)) {
-                    totalDuplicates++;
+            int hashValue1 = hash1(hashObject.getKey());
+            int hashValue2 = hash2(hashObject.getKey());
+            int i = 0;
+            // int index = (hashValue1 + (i * hashValue2)) % tableSize;
+
+            // if(index < 0) {
+            //     index += tableSize;
+            // }
+
+            // while(i != tableSize) {
+            //     int index = (hashValue1 + (i * hashValue2)) % tableSize;
+
+            //     if(index < 0) {
+            //         index += tableSize;
+            //     }
+
+            //     if(hashTable[index] == null) {
+            //         hashTable[index] = hashObject;
+            //         totalInserts++;
+            //         totalProbes += i + 1;
+            //         hashObject.setProbeCount(i + 1);
+            //         return;
+            //     } else if(hashTable[index].equals(hashObject)) {
+            //         totalDuplicates++;
+            //         hashObject.increaseDuplicateCount();
+            //         return;
+            //     }
+
+            //     i++;
+            // }
+
+            while(i != tableSize) {
+                int index = (hashValue1 + (i * hashValue2)) % tableSize;
+
+                if(index < 0) {
+                    index += tableSize;
                 }
-                doubleHashValue = (hashValue + (i * hash2(hashValue))) % tableSize;
-                totalProbes++;
+
+                if(hashTable[index] == null) {
+                    hashTable[index] = hashObject;
+                    totalInserts++;
+                    totalProbes += i + 1;
+                    hashObject.setProbeCount(i + 1);
+                    return;
+                } else if(hashTable[index].equals(hashObject)) {
+                    totalDuplicates++;
+                    hashObject.increaseDuplicateCount();
+                    return;
+                }
+
+                i++;
             }
 
-            hashTable[doubleHashValue] = hashObject;
+            // while(hashTable[index] != null) {
+            //     if(hashTable[index].equals(hashObject)) {
+            //         totalDuplicates++;
+            //         hashObject.increaseDuplicateCount();
+            //         return;
+            //     } else {
+            //         totalProbes++;
+            //         hashObject.increaseProbeCount();
+            //     }
+
+            //     i++;
+            //     index = (hashValue1 + (i * hashValue2)) % tableSize;
+
+            //     if(index < 0) {
+            //         index += tableSize;
+            //     }
+            // }
+
+            // hashTable[index] = hashObject;
+            // totalInserts++;
+
+            // return;
         }
     }
 
@@ -65,5 +181,21 @@ public class HashTable<T> {
 
     public int getTableSize() {
         return tableSize;
+    }
+
+    public int getTotalInputs() {
+        return totalInputs;
+    }
+
+    public int getTotalInserts() {
+        return totalInserts;
+    }
+
+    public double getLoadFactor() {
+        return loadFactor;
+    }
+
+    public double loadFactor() {
+        return (double) totalInserts / (double) tableSize;
     }
 }
