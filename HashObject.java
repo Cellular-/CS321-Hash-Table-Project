@@ -1,25 +1,20 @@
 public class HashObject<T> {
     private T key;
-    private T value;
     private int duplicateCount;
     private int probeCount;
 
     public HashObject(T key) {
         this.key = key;
-        duplicateCount = 0;
-        probeCount = 0;
+        this.duplicateCount = 0;
+        this.probeCount = 0;
     }
 
     public T getKey() {
         return key;
     }
 
-    public T getValue() {
-        return value;
-    }
-
     public void increaseDuplicateCount() {
-        duplicateCount++;
+        duplicateCount += 1;
     }
 
     public void increaseProbeCount() {
@@ -33,14 +28,11 @@ public class HashObject<T> {
     @Override
     public boolean equals(Object obj) {
         if(this.getClass().equals(obj.getClass())) {
-            return (this.getKey().equals(((HashObject<T>)obj).getKey()));
+            return (this.getKey().equals(((HashObject<?>)obj).getKey()));
         }
 
         return false;
     }
-
-
-
 
     @Override
     public String toString() {
