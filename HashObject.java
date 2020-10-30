@@ -1,3 +1,8 @@
+/**
+ * Generic hash object that holds a key, duplicate count
+ * and probe count. Used to populate the HashTable class
+ * instances.
+ */
 public class HashObject<T> {
     private T key;
     private int duplicateCount;

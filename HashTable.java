@@ -25,6 +25,13 @@ public class HashTable<T> {
         this.totalInserts = 0;
     }
 
+    /**
+     * Generates hash value for HashObject key.
+     * Used in the linear probing process.
+     * 
+     * @param k - The key of the HashObject instance
+     * @return hashCode value for key
+     */
     private int hash1(T k) {
         int h = k.hashCode() % tableSize;
         if(h < 0) {
@@ -34,6 +41,13 @@ public class HashTable<T> {
         return h;
     }
 
+    /**
+     * Generates hash value for HashObject key.
+     * Used in the double hashing process.
+     * 
+     * @param k - The key of the HashObject instance
+     * @return hashCode value for key
+     */
     private int hash2(T k) {
         int h = 1 + (k.hashCode() % (tableSize - 2));
         if(h < 0) {

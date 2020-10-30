@@ -3,6 +3,14 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Random;
 
+/**
+ * Tests the HashTables linear probing and double hashing processes
+ * for correctness. Prints the experiment results and writes results
+ * to file if specified.
+ * 
+ * The data sources are random integers, system milliseconds and 
+ * words from a provided list.
+ */
 public class HashTest {
     public static void main(String[] args) {
         if(args.length > 3 && args.length < 2) {
@@ -29,7 +37,7 @@ public class HashTest {
         System.out.println();
         System.out.println("Using Double Hashing....");
         System.out.println("Input " + attempts + " elements, of which " + doubleHash.getTotalDuplicates() + " duplicates");
-        System.out.println("load factor = " + doubleHash.getLoadFactor() + ", Avg. no of probes " + (double) ((double) (doubleHash.getTotalProbes()) / (double) (doubleHash.getTotalInserts())));
+        System.out.println("load factor = " + doubleHash.getLoadFactor() + ", Avg. no of probes " + ((double) (doubleHash.getTotalProbes()) / (double) (doubleHash.getTotalInserts())));
     }
 
     public static void run(String args[]) {
