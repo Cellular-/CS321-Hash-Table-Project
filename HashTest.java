@@ -15,7 +15,7 @@ public class HashTest {
 
     public static String usage() {
         return "\nUsage is: java HashTest <datasource> <load_factor>\n" +
-                "<datasource> options:\n\t1 for random integers\n\t2 for system milliseconds\n\t3 for file with strings\n" +
+                "<datasource> options:\n\t1 for random integers\n\t2 for system milliseconds\n\t3 for word-list\n" +
                 "<load_factor> options:\n\tA decimal greater than zero and less than 1\n";
     }
 
